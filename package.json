@@ -7,8 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
+  "prettier": "@lnu/prettier-config",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/EACORTHO777/chord-and-melody-generator.git"
@@ -28,10 +31,12 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@lnu/eslint-config": "^3.0.1",
+    "@lnu/prettier-config": "^1.0.1",
     "eslint": "^10.12.0",
     "eslint-plugin-jsdoc": "^65.3.4",
     "eslint-plugin-regexp": "^3.3.1",
     "globals": "^17.13.0",
+    "prettier": "^3.9.10",
     "vite": "^8.3.4"
   }
 }
