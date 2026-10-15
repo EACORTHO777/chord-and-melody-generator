@@ -1,3 +1,6 @@
+# Chord and Melody Generator
+
+**Try the app:** https://chord-and-melody-generator.vercel.app
 ## Vision
 
 - An application for musicians, developers or for people that want to learn the basics of how to make music. The app solves writer's block for musicians, and creates a easy way how to create basic chord progression or melodies based in the most common scales in music theory. It solves this problem by giving the user a easy tool for creating inspiring chord progressions or melodies that can be applied in existing work or a spark to new sessions.
