@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "generate-icons": "pwa-assets-generator"
   },
   "prettier": "@lnu/prettier-config",
   "repository": {
@@ -32,6 +33,7 @@
     "@eslint/js": "^10.0.1",
     "@lnu/eslint-config": "^3.0.1",
     "@lnu/prettier-config": "^1.0.1",
+    "@vite-pwa/assets-generator": "^2.0.0",
     "eslint": "^10.12.0",
     "eslint-plugin-jsdoc": "^65.3.4",
     "eslint-plugin-regexp": "^3.3.1",
