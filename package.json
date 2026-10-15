@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,12 @@
     "music-theory-toolkit": "github:EACORTHO777/music-theory-toolkit"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@lnu/eslint-config": "^3.0.1",
+    "eslint": "^10.12.0",
+    "eslint-plugin-jsdoc": "^65.3.4",
+    "eslint-plugin-regexp": "^3.3.1",
+    "globals": "^17.13.0",
     "vite": "^8.3.4"
   }
 }
