@@ -1,0 +1,25 @@
+{
+  "name": "chord-and-melody-generator",
+  "version": "1.0.0",
+  "description": "- An application for musicians, developers or for people that want to learn the basics of how to make music. The app solves writer's block for musicians, and creates a easy way how to create basic chord progression or melodies based in the most common scales in music theory. It solves this problem by giving the user a easy tool for creating inspiring chord progressions or melodies that can be applied in existing work or a spark to new sessions.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EACORTHO777/chord-and-melody-generator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/EACORTHO777/chord-and-melody-generator/issues"
+  },
+  "homepage": "https://github.com/EACORTHO777/chord-and-melody-generator#readme",
+  "dependencies": {
+    "dice-rng-toolkit": "github:ThJoker3/Dice-RNG-Toolkit",
+    "music-theory-toolkit": "github:EACORTHO777/music-theory-toolkit"
+  }
+}
