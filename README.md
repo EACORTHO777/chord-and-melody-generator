@@ -11,4 +11,4 @@
 - R5. Function to save users favorite chord progressions and or melodies.
 - R6. A function to show the notes in a chord, a scale and relative minor/majors.
 - R7. Option to save melodies and or chords down in MIDI to local device.
-- R8. A share button to share the melody with friends or co musician.s 
+- R8. A share button to share the melody with friends or co musicians.
