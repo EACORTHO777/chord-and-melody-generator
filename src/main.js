@@ -7,6 +7,7 @@ import { MelodyGenerator } from './MelodyGenerator.js'
 import { ShareLink } from './ShareLink.js'
 import { SongGenerator } from './SongGenerator.js'
 import { FavoriteStorage } from './FavoriteStorage.js'
+import { MidiFileWriter } from './MidiFileWriter.js'
 
 const randomGenerator = new RandomGenerator()
 const randomizer = new Randomizer()
@@ -23,6 +24,7 @@ const app = new ChordAndMelodyApp({
   audioPlayer: new AudioPlayer(new AudioContext()),
   shareLink: new ShareLink(window.location),
   favoriteStorage: new FavoriteStorage(window.localStorage),
+  midiFileWriter: new MidiFileWriter(),
 })
 
 app.start()

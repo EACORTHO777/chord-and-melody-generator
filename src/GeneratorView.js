@@ -18,6 +18,7 @@ export class GeneratorView {
   #shareOutput
   #saveFavoriteButton
   #favoritesOutput
+  #downloadMidiButton
 
   /**
    * Finds the generator's elements on the page.
@@ -38,6 +39,7 @@ export class GeneratorView {
     this.#shareOutput = document.querySelector('#share-output')
     this.#saveFavoriteButton = document.querySelector('#save-favorite-button')
     this.#favoritesOutput = document.querySelector('#favorites-output')
+    this.#downloadMidiButton = document.querySelector('#download-midi-button')
   }
 
   /**
@@ -92,6 +94,29 @@ export class GeneratorView {
    */
   onSaveFavorite(handler) {
     this.#saveFavoriteButton.addEventListener('click', handler)
+  }
+
+  /**
+   * Calls the handler when the user presses Download MIDI.
+   *
+   * @param {() => void} handler - The function to call.
+   */
+  onDownloadMidi(handler) {
+    this.#downloadMidiButton.addEventListener('click', handler)
+  }
+
+  /**
+   * Lets the user download a file.
+   *
+   * @param {Uint8Array} bytes - The content of the file.
+   * @param {string} fileName - The name of the downloaded file.
+   */
+  downloadFile(bytes, fileName) {
+    const link = this.#document.createElement('a')
+    link.href = URL.createObjectURL(new Blob([bytes], { type: 'audio/midi' }))
+    link.download = fileName
+    link.click()
+    URL.revokeObjectURL(link.href)
   }
 
   /**
@@ -150,6 +175,7 @@ export class GeneratorView {
     this.#playButton.disabled = false
     this.#shareButton.disabled = false
     this.#saveFavoriteButton.disabled = false
+    this.#downloadMidiButton.disabled = false
   }
   /**
    * Replaces the content of a container with one button per item.

@@ -6,6 +6,7 @@ import { Note, Scale } from 'music-theory-toolkit'
 /** @typedef {import('./ShareLink.js').ShareLink} ShareLink */
 /** @typedef {import('./FavoriteStorage.js').FavoriteStorage} FavoriteStorage */
 /** @typedef {{ rootNote: string, scaleType: string, seed: number }} SongSettings */
+/** @typedef {import('./MidiFileWriter.js').MidiFileWriter} MidiFileWriter */
 
 /**
  * Connects the page to the song generator, the audio player, share links and favorites.
@@ -18,6 +19,7 @@ export class ChordAndMelodyApp {
   #favoriteStorage
   #songSettings = { rootNote: '', scaleType: '', seed: 0 }
   #song = { chords: [], melody: [] }
+  #midiFileWriter
 
   /**
    * Creates the app from its parts.
@@ -28,13 +30,15 @@ export class ChordAndMelodyApp {
    * @param {AudioPlayer} parts.audioPlayer - Plays the generated song.
    * @param {ShareLink} parts.shareLink - Creates and reads share links.
    * @param {FavoriteStorage} parts.favoriteStorage - Saves favorite songs.
+   * @param {MidiFileWriter} parts.midiFileWriter - Creates MIDI files.
    */
-  constructor({ view, songGenerator, audioPlayer, shareLink, favoriteStorage }) {
+  constructor({ view, songGenerator, audioPlayer, shareLink, favoriteStorage, midiFileWriter }) {
     this.#view = view
     this.#songGenerator = songGenerator
     this.#audioPlayer = audioPlayer
     this.#shareLink = shareLink
     this.#favoriteStorage = favoriteStorage
+    this.#midiFileWriter = midiFileWriter
   }
 
   /**
@@ -45,6 +49,7 @@ export class ChordAndMelodyApp {
     this.#view.onPlay(() => this.#audioPlayer.playSong(this.#song.chords, this.#song.melody))
     this.#view.onShare(() => this.#shareSong())
     this.#view.onSaveFavorite(() => this.#saveFavorite())
+    this.#view.onDownloadMidi(() => this.#downloadMidi())
     this.#showFavorites()
 
     if (this.#shareLink.hasSharedSong()) {
@@ -92,6 +97,16 @@ export class ChordAndMelodyApp {
   #saveFavorite() {
     this.#favoriteStorage.add(this.#songSettings)
     this.#showFavorites()
+  }
+
+  /**
+   * Lets the user download the current song as a MIDI file.
+   */
+  #downloadMidi() {
+    const { rootNote, scaleType, seed } = this.#songSettings
+    const midiFile = this.#midiFileWriter.createFile(this.#song.chords, this.#song.melody)
+
+    this.#view.downloadFile(midiFile, `${rootNote}-${scaleType}-${seed}.mid`)
   }
 
   /**
