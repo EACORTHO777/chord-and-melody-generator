@@ -16,6 +16,8 @@ export class GeneratorView {
   #scaleNotesOutput
   #shareButton
   #shareOutput
+  #saveFavoriteButton
+  #favoritesOutput
 
   /**
    * Finds the generator's elements on the page.
@@ -34,6 +36,8 @@ export class GeneratorView {
     this.#scaleNotesOutput = document.querySelector('#scale-notes-output')
     this.#shareButton = document.querySelector('#share-button')
     this.#shareOutput = document.querySelector('#share-output')
+    this.#saveFavoriteButton = document.querySelector('#save-favorite-button')
+    this.#favoritesOutput = document.querySelector('#favorites-output')
   }
 
   /**
@@ -82,6 +86,25 @@ export class GeneratorView {
   }
 
   /**
+   * Calls the handler when the user presses Save favorite.
+   *
+   * @param {() => void} handler - The function to call.
+   */
+  onSaveFavorite(handler) {
+    this.#saveFavoriteButton.addEventListener('click', handler)
+  }
+
+  /**
+   * Shows the saved favorites. Each favorite is a button that opens the song again.
+   *
+   * @param {Array<{ rootNote: string, scaleType: string, seed: number }>} favorites - The saved favorites.
+   * @param {(favorite: { rootNote: string, scaleType: string, seed: number }) => void} onFavoriteClick - Called with the favorite when its button is clicked.
+   */
+  showFavorites(favorites, onFavoriteClick) {
+    this.#showButtons(this.#favoritesOutput, favorites, (favorite) => this.#favoriteLabel(favorite), onFavoriteClick)
+  }
+
+  /**
    * Selects a key in the dropdowns, e.g. when a shared link is opened.
    *
    * @param {string} rootNote - The root note to select, e.g. "E".
@@ -89,7 +112,7 @@ export class GeneratorView {
    */
   selectKey(rootNote, scaleType) {
     this.#rootNoteSelect.value = rootNote
-    this.#scaleTypeSelect.vale = scaleType
+    this.#scaleTypeSelect.value = scaleType
   }
 
   /**
@@ -111,7 +134,7 @@ export class GeneratorView {
    */
   showKey(scaleNotes, relativeKeyName, onNoteClick) {
     this.#relativeKeyOutput.textContent = `Relative key: ${relativeKeyName}`
-    this.#showButtons(this.#scaleNotesOutput, scaleNotes, onNoteClick)
+    this.#showButtons(this.#scaleNotesOutput, scaleNotes, (note) => note.toString(), onNoteClick)
   }
 
   /**
@@ -122,26 +145,36 @@ export class GeneratorView {
    * @param {(chord: Chord) => void} onChordClick - Called with the chord when its button is clicked.
    */
   showSong(chords, melody, onChordClick) {
-    this.#showButtons(this.#chordsOutput, chords, onChordClick)
+    this.#showButtons(this.#chordsOutput, chords, (chord) => chord.toString(), onChordClick)
     this.#melodyOutput.textContent = melody.map((note) => note.toString()).join(' ')
     this.#playButton.disabled = false
     this.#shareButton.disabled = false
+    this.#saveFavoriteButton.disabled = false
   }
-
   /**
    * Replaces the content of a container with one button per item.
    *
    * @param {HTMLElement} container - The element to put the buttons in.
-   * @param {Array<Note|Chord>} items - The items to show. Their toString() becomes the button text.
-   * @param {(item: Note|Chord) => void} onClick - Called with the item when its button is clicked.
+   * @param {Array<object>} items - The items to show, e.g. notes, chords or favorites.
+   * @param {(item: any) => string} toLabel - Returns the button text for an item.
+   * @param {(item: any) => void} onClick - Called with the item when its button is clicked.
    */
-  #showButtons(container, items, onClick) {
+  #showButtons(container, items, toLabel, onClick) {
     const buttons = items.map((item) => {
       const button = this.#document.createElement('button')
-      button.textContent = item.toString()
+      button.textContent = toLabel(item)
       button.addEventListener('click', () => onClick(item))
       return button
     })
     container.replaceChildren(...buttons)
+  }
+  /**
+   * Returns the button text for a favorite, e.g. "E minor #4821".
+   *
+   * @param {{ rootNote: string, scaleType: string, seed: number }} favorite - A saved favorite
+   * @returns {string} The button text.
+   */
+  #favoriteLabel(favorite) {
+    return `${favorite.rootNote} ${favorite.scaleType} #${favorite.seed}`
   }
 }

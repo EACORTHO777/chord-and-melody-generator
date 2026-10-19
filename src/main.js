@@ -6,6 +6,7 @@ import { GeneratorView } from './GeneratorView.js'
 import { MelodyGenerator } from './MelodyGenerator.js'
 import { ShareLink } from './ShareLink.js'
 import { SongGenerator } from './SongGenerator.js'
+import { FavoriteStorage } from './FavoriteStorage.js'
 
 const randomGenerator = new RandomGenerator()
 const randomizer = new Randomizer()
@@ -16,11 +17,12 @@ const songGenerator = new SongGenerator(
   new MelodyGenerator(randomGenerator, randomizer),
 )
 
-const app = new ChordAndMelodyApp(
-  new GeneratorView(document),
+const app = new ChordAndMelodyApp({
+  view: new GeneratorView(document),
   songGenerator,
-  new AudioPlayer(new AudioContext()),
-  new ShareLink(window.location),
-)
+  audioPlayer: new AudioPlayer(new AudioContext()),
+  shareLink: new ShareLink(window.location),
+  favoriteStorage: new FavoriteStorage(window.localStorage),
+})
 
 app.start()

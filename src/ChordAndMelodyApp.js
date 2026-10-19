@@ -4,52 +4,60 @@ import { Note, Scale } from 'music-theory-toolkit'
 /** @typedef {import('./SongGenerator.js').SongGenerator} SongGenerator */
 /** @typedef {import('./AudioPlayer.js').AudioPlayer} AudioPlayer */
 /** @typedef {import('./ShareLink.js').ShareLink} ShareLink */
+/** @typedef {import('./FavoriteStorage.js').FavoriteStorage} FavoriteStorage */
+/** @typedef {{ rootNote: string, scaleType: string, seed: number }} SongSettings */
 
 /**
- * Connects the page to the song generator, the audio player and share links.
+ * Connects the page to the song generator, the audio player, share links and favorites.
  */
 export class ChordAndMelodyApp {
   #view
   #songGenerator
   #audioPlayer
   #shareLink
-  #songSettings = { rootNote: '', scaleTypes: '', seed: 0 }
+  #favoriteStorage
+  #songSettings = { rootNote: '', scaleType: '', seed: 0 }
   #song = { chords: [], melody: [] }
 
   /**
    * Creates the app from its parts.
    *
-   * @param {GeneratorView} view - The page elements.
-   * @param {SongGenerator} songGenerator - Generates songs from a seed.
-   * @param {AudioPlayer} audioPlayer - Plays the generated song.
-   * @param {ShareLink} shareLink - Creates and reads share links.
+   * @param {object} parts - The parts of the app.
+   * @param {GeneratorView} parts.view - The page elements.
+   * @param {SongGenerator} parts.songGenerator - Generates songs from a seed.
+   * @param {AudioPlayer} parts.audioPlayer - Plays the generated song.
+   * @param {ShareLink} parts.shareLink - Creates and reads share links.
+   * @param {FavoriteStorage} parts.favoriteStorage - Saves favorite songs.
    */
-  constructor(view, songGenerator, audioPlayer, shareLink) {
+  constructor({ view, songGenerator, audioPlayer, shareLink, favoriteStorage }) {
     this.#view = view
     this.#songGenerator = songGenerator
     this.#audioPlayer = audioPlayer
     this.#shareLink = shareLink
+    this.#favoriteStorage = favoriteStorage
   }
 
   /**
-   * Starts listening to the user's actions and opens a shared song if the address contains one.
+   * Starts listening to the user's actions, shows saved favorites and opens a shared song if there is one.
    */
   start() {
     this.#view.onGenerate(() => this.#showSong(this.#songGenerator.nextSeed()))
     this.#view.onPlay(() => this.#audioPlayer.playSong(this.#song.chords, this.#song.melody))
     this.#view.onShare(() => this.#shareSong())
+    this.#view.onSaveFavorite(() => this.#saveFavorite())
+    this.#showFavorites()
 
     if (this.#shareLink.hasSharedSong()) {
-      this.#openSharedSong()
+      this.#openSong(this.#shareLink.sharedSong)
     }
   }
 
   /**
-   * Selects the key for the shared link and shows its song.
+   * Selects the key of a saved or shared song and shows the song.
+   *
+   * @param {SongSettings} songSettings - The key and seed of the song.
    */
-  #openSharedSong() {
-    const { rootNote, scaleType, seed } = this.#shareLink.sharedSong
-
+  #openSong({ rootNote, scaleType, seed }) {
     this.#view.selectKey(rootNote, scaleType)
     this.#showSong(seed)
   }
@@ -57,7 +65,7 @@ export class ChordAndMelodyApp {
   /**
    * Generates the song for a seed in the chosen key and shows it.
    *
-   * @param {number} seed - Decides which song i generated.
+   * @param {number} seed - Decides which song is generated.
    */
   #showSong(seed) {
     const scale = this.#selectedScale()
@@ -66,7 +74,7 @@ export class ChordAndMelodyApp {
     this.#song = this.#songGenerator.generate(scale, seed)
 
     this.#view.showKey(scale.notes, scale.relative().toString(), (note) => this.#audioPlayer.playNote(note))
-    this.#view.showSong(this.#song.chords, this.#song.melody, (chord) => this.audioPLayer.playChord(chord))
+    this.#view.showSong(this.#song.chords, this.#song.melody, (chord) => this.#audioPlayer.playChord(chord))
   }
 
   /**
@@ -79,9 +87,24 @@ export class ChordAndMelodyApp {
   }
 
   /**
+   * Saves the current song as a favorite and updates the list.
+   */
+  #saveFavorite() {
+    this.#favoriteStorage.add(this.#songSettings)
+    this.#showFavorites()
+  }
+
+  /**
+   * Shows all saved favorites. Clicking one opens the song again.
+   */
+  #showFavorites() {
+    this.#view.showFavorites(this.#favoriteStorage.all, (favorite) => this.#openSong(favorite))
+  }
+
+  /**
    * Creates the scale the user has chosen, in octave 4.
    *
-   * @returns {Scale} The chosen scale
+   * @returns {Scale} The chosen scale.
    */
   #selectedScale() {
     const rootNote = new Note(`${this.#view.selectedRootNote}4`)
