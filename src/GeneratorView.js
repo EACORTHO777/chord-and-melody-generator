@@ -126,6 +126,10 @@ export class GeneratorView {
    * @param {(favorite: { rootNote: string, scaleType: string, seed: number }) => void} onFavoriteClick - Called with the favorite when its button is clicked.
    */
   showFavorites(favorites, onFavoriteClick) {
+    if (favorites.length === 0) {
+      this.#favoritesOutput.textContent = 'No favorites saved yet.'
+      return
+    }
     this.#showButtons(this.#favoritesOutput, favorites, (favorite) => this.#favoriteLabel(favorite), onFavoriteClick)
   }
 

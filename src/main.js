@@ -1,3 +1,4 @@
+import './style.css'
 import { RandomGenerator, Randomizer } from 'dice-rng-toolkit'
 import { AudioPlayer } from './AudioPlayer.js'
 import { ChordAndMelodyApp } from './ChordAndMelodyApp.js'
