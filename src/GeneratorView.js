@@ -11,6 +11,9 @@ export class GeneratorView {
   #playButton
   #chordsOutput
   #melodyOutput
+  #document
+  #relativeKeyOutput
+  #scaleNotesOutput
 
   /**
    * Finds the generator's elements on the page.
@@ -24,6 +27,9 @@ export class GeneratorView {
     this.#playButton = document.querySelector('#play-button')
     this.#chordsOutput = document.querySelector('#chords-output')
     this.#melodyOutput = document.querySelector('#melody-output')
+    this.#document = document
+    this.#relativeKeyOutput = document.querySelector('#relative-key-output')
+    this.#scaleNotesOutput = document.querySelector('#scale-notes-output')
   }
 
   /**
@@ -63,14 +69,44 @@ export class GeneratorView {
   }
 
   /**
-   * Shows a generated song and enables the Play button.
+   * Shows the notes of the chosen key and its relative key. Each note is a button that can be played.
+   *
+   * @param {Note[]} scaleNotes - The notes of the chosen scale.
+   * @param {string} relativeKeyName - The name of the relative key, e.g. "A minor".
+   * @param {(note: Note) => void} onNoteClick - Called with the note when its button is clicked.
+   */
+  showKey(scaleNotes, relativeKeyName, onNoteClick) {
+    this.#relativeKeyOutput.textContent = `Relative key: ${relativeKeyName}`
+    this.#showButtons(this.#scaleNotesOutput, scaleNotes, onNoteClick)
+  }
+
+  /**
+   * Shows a generated song and enables the Play button. Each chord is a button that can be played.
    *
    * @param {Chord[]} chords - The chord progression.
    * @param {Note[]} melody - The melody.
+   * @param {(chord: Chord) => void} onChordClick - Called with the chord when its button is clicked.
    */
-  showSong(chords, melody) {
-    this.#chordsOutput.textContent = chords.map((chord) => chord.toString()).join(' | ')
+  showSong(chords, melody, onChordClick) {
+    this.#showButtons(this.#chordsOutput, chords, onChordClick)
     this.#melodyOutput.textContent = melody.map((note) => note.toString()).join(' ')
     this.#playButton.disabled = false
+  }
+
+  /**
+   * Replaces the content of a container with one button per item.
+   *
+   * @param {HTMLElement} container - The element to put the buttons in.
+   * @param {Array<Note|Chord>} items - The items to show. Their toString() becomes the button text.
+   * @param {(item: Note|Chord) => void} onClick - Called with the item when its button is clicked.
+   */
+  #showButtons(container, items, onClick) {
+    const buttons = items.map((item) => {
+      const button = this.#document.createElement('button')
+      button.textContent = item.toString()
+      button.addEventListener('click', () => onClick(item))
+      return button
+    })
+    container.replaceChildren(...buttons)
   }
 }

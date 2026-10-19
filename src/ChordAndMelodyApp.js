@@ -47,7 +47,9 @@ export class ChordAndMelodyApp {
 
     this.#chords = this.#chordProgressionGenerator.generate(scale)
     this.#melody = this.#melodyGenerator.generate(scale, this.#chords)
-    this.#view.showSong(this.#chords, this.#melody)
+
+    this.#view.showKey(scale.notes, scale.relative().toString(), (note) => this.#audioPlayer.playNote(note))
+    this.#view.showSong(this.#chords, this.#melody, (chord) => this.#audioPlayer.playChord(chord))
   }
 
   /**
