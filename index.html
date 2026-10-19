@@ -9,7 +9,49 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
   </head>
   <body>
-    <main id="app"></main>
+    <main>
+      <h1>Chord and Melody Generator</h1>
+
+      <section>
+        <label>
+          Root note
+          <select id="root-note">
+            <option>C</option>
+            <option>C#</option>
+            <option>D</option>
+            <option>D#</option>
+            <option>E</option>
+            <option>F</option>
+            <option>F#</option>
+            <option>G</option>
+            <option>G#</option>
+            <option>A</option>
+            <option>A#</option>
+            <option>B</option>
+          </select>
+        </label>
+        <label>
+          Scale
+          <select id="scale-type">
+            <option value="major">Major</option>
+            <option value="minor">Minor</option>
+          </select>
+        </label>
+      </section>
+
+      <section>
+        <button id="generate-button">Generate</button>
+        <button id="play-button" disabled>Play</button>
+      </section>
+
+      <section>
+        <h2>Chords</h2>
+        <p id="chords-output">Press Generate to create a chord progression.</p>
+        <h2>Melody</h2>
+        <p id="melody-output"></p>
+      </section>
+    </main>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

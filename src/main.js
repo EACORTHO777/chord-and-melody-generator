@@ -1,8 +1,18 @@
-import { Note } from 'music-theory-toolkit'
-import { RandomGenerator } from 'dice-rng-toolkit'
+import { RandomGenerator, Randomizer } from 'dice-rng-toolkit'
+import { AudioPlayer } from './AudioPlayer.js'
+import { ChordAndMelodyApp } from './ChordAndMelodyApp.js'
+import { ChordProgressionGenerator } from './ChordProgressionGenerator.js'
+import { GeneratorView } from './GeneratorView.js'
+import { MelodyGenerator } from './MelodyGenerator.js'
 
-const note = new Note('C4')
-const randomGenerator = new RandomGenerator(42)
+const randomGenerator = new RandomGenerator()
+const randomizer = new Randomizer()
 
-document.querySelector('#app').textContent =
-  `${note.toString()} ${note.frequency} hz, random ${randomGenerator.nextInt(1, 6)}`
+const app = new ChordAndMelodyApp(
+  new GeneratorView(document),
+  new ChordProgressionGenerator(randomGenerator, randomizer),
+  new MelodyGenerator(randomGenerator, randomizer),
+  new AudioPlayer(new AudioContext()),
+)
+
+app.start()
