@@ -14,6 +14,8 @@ export class GeneratorView {
   #document
   #relativeKeyOutput
   #scaleNotesOutput
+  #shareButton
+  #shareOutput
 
   /**
    * Finds the generator's elements on the page.
@@ -30,6 +32,8 @@ export class GeneratorView {
     this.#document = document
     this.#relativeKeyOutput = document.querySelector('#relative-key-output')
     this.#scaleNotesOutput = document.querySelector('#scale-notes-output')
+    this.#shareButton = document.querySelector('#share-button')
+    this.#shareOutput = document.querySelector('#share-output')
   }
 
   /**
@@ -69,6 +73,36 @@ export class GeneratorView {
   }
 
   /**
+   * Calls the handler when the user presses Share.
+   *
+   * @param {() => void} handler - The function to call.
+   */
+  onShare(handler) {
+    this.#shareButton.addEventListener('click', handler)
+  }
+
+  /**
+   * Selects a key in the dropdowns, e.g. when a shared link is opened.
+   *
+   * @param {string} rootNote - The root note to select, e.g. "E".
+   * @param {string} scaleType - The scale type to select, "major" or "minor".
+   */
+  selectKey(rootNote, scaleType) {
+    this.#rootNoteSelect.value = rootNote
+    this.#scaleTypeSelect.vale = scaleType
+  }
+
+  /**
+   * Shows a share link and copies it to the clipboard.
+   *
+   * @param {string} link - The link to the song.
+   */
+  showShareLink(link) {
+    navigator.clipboard.writeText(link)
+    this.#shareOutput.textContent = `Link copied: ${link}`
+  }
+
+  /**
    * Shows the notes of the chosen key and its relative key. Each note is a button that can be played.
    *
    * @param {Note[]} scaleNotes - The notes of the chosen scale.
@@ -91,6 +125,7 @@ export class GeneratorView {
     this.#showButtons(this.#chordsOutput, chords, onChordClick)
     this.#melodyOutput.textContent = melody.map((note) => note.toString()).join(' ')
     this.#playButton.disabled = false
+    this.#shareButton.disabled = false
   }
 
   /**
