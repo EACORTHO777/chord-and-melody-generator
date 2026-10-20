@@ -78,7 +78,7 @@ export class ChordAndMelodyApp {
     this.#songSettings = { rootNote: this.#view.selectedRootNote, scaleType: this.#view.selectedScaleType, seed }
     this.#song = this.#songGenerator.generate(scale, seed)
 
-    this.#view.showKey(scale.notes, scale.relative().toString(), (note) => this.#audioPlayer.playNote(note))
+    this.#view.showKey(scale.notes, scale.toRelative().toString(), (note) => this.#audioPlayer.playNote(note))
     this.#view.showSong(this.#song.chords, this.#song.melody, (chord) => this.#audioPlayer.playChord(chord))
   }
 
