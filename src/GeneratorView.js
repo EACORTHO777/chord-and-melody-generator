@@ -174,7 +174,7 @@ export class GeneratorView {
    * @param {(chord: Chord) => void} onChordClick - Called with the chord when its button is clicked.
    */
   showSong(chords, melody, onChordClick) {
-    this.#showButtons(this.#chordsOutput, chords, (chord) => chord.toString(), onChordClick)
+    this.#showButtons(this.#chordsOutput, chords, (chord) => this.#chordLabel(chord), onChordClick)
     this.#melodyOutput.textContent = melody.map((note) => note.toString()).join(' ')
     this.#playButton.disabled = false
     this.#shareButton.disabled = false
@@ -206,5 +206,17 @@ export class GeneratorView {
    */
   #favoriteLabel(favorite) {
     return `${favorite.rootNote} ${favorite.scaleType} #${favorite.seed}`
+  }
+
+  /**
+   * Returns the button text for a chord, with its notes, e.g. "C major (C E G)".
+   *
+   * @param {Chord} chord - The chord.
+   * @returns {string} The button text.
+   */
+  #chordLabel(chord) {
+    const noteNames = chord.notes.map((note) => note.name).join(' ')
+
+    return `${chord.toString()} (${noteNames})`
   }
 }
