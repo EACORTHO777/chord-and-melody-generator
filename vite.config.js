@@ -11,8 +11,8 @@ export default defineConfig({
         description: 'Generate chord progressions and melodies and play them in the browser.',
         start_url: '/',
         display: 'standalone',
-        background_color: '#ffffff',
-        theme_color: '#ffffff',
+        background_color: '#0e0e10',
+        theme_color: '#0e0e10',
         icons: [
           { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
