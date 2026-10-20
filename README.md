@@ -32,7 +32,7 @@ Only major and minor keys are supported, since the relative key and the chords o
 
 ### Run locally
 
-Requires Node.js 18 or later.
+Requires Node.js 24.15 or later (22.22 also works).
 
 ```
 git clone https://github.com/EACORTHO777/chord-and-melody-generator.git
