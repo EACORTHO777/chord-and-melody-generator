@@ -28,6 +28,12 @@
 
 Only major and minor keys are supported, since the relative key and the chords of a key are only defined for seven-note major and minor scales in the module.
 
+## Limitations and future development
+
+- The chord progression is picked from four popular progressions.
+- All melody notes have the same length, and the melody stays within one octave.
+- Future versions could add more progressions, rhythm and melodies that move more stepwise.
+
 ## For developers
 
 ### Run locally
